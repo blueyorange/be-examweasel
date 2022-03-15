@@ -11,6 +11,7 @@ const QuestionSchema = new mongoose.Schema({
   question_text: String,
   answer_text: String,
   description: String,
+  topic: String,
   types: [
     {
       type: String,

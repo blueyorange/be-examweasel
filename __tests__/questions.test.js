@@ -53,4 +53,14 @@ describe("GET /api/questions/", () => {
         );
       });
   });
+  it("200: query with date", () => {
+    const params = new URLSearchParams("?from=2005-01&to=2015-01");
+    return request(app)
+      .get(`/api/questions/?${params.toString()}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.questions).toEqual(expect.arrayContaining([expect.objectContaining({date: expect.})]))
+      });
+  });
 });

@@ -116,4 +116,18 @@ describe("GET /api/questions/", () => {
       .set(tokenHeaderKey, `Bearer ${token}`)
       .expect(400);
   });
+  it("200: search term query", () => {
+    const term = "water";
+    const params = new URLSearchParams();
+    params.set("term", term);
+    return request(app)
+      .get(`/api/questions/?${params.toString()}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        body.questions.forEach((question) => {
+          expect(question.question_text).toMatch(new RegExp(term, "i"));
+        });
+      });
+  });
 });

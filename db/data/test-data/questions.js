@@ -30,7 +30,7 @@ module.exports = [
     subject: "Physics",
     award: "IGCSE",
     exam_board: "CIE",
-    tags: ["work", "mass", "weight", "power", "shortanswer"],
+    tags: ["work", "mass", "weight", "power", "short-answer"],
     question_text:
       "Fig. 3.1 shows the arm of a crane when it is lifting a heavy box.\n\nbox\n\n \n\nFig. 3.1\n\n(a) By the use of a scale diagram (not calculation) of the forces acting at P, find the weight\nof the box. [5]\n\n \n\fUse\n\n(b) Another box of weight 1500N is raised vertically by 3.0 m.\n\n(i) Calculate the work done on the box.\n\nwork done =\n\n \n\n(ii) The crane takes 2.5s to raise this box 3.0m. Calculate the power output of the\ncrane.\n\n \n\n \n\f",
     description: "NO DESCRIPTION",
@@ -588,7 +588,7 @@ module.exports = [
   },
   {
     number: "36",
-    date: "2003-05-31T23:00:00.000Z",
+    date: "2010-05-31T23:00:00.000Z",
     topic: "4.2 Electrical quantities",
     subject: "Physics",
     award: "IGCSE",

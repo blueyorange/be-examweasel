@@ -1,5 +1,7 @@
 const app = require("../app");
 const request = require("supertest");
+const { toBeBetween } = require("jest-extended");
+expect.extend({ toBeBetween });
 const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 require("dotenv").config();
@@ -54,13 +56,34 @@ describe("GET /api/questions/", () => {
       });
   });
   it("200: query with date", () => {
-    const params = new URLSearchParams("?from=2005-01&to=2015-01");
+    const from = "2005-01",
+      to = "2015-01";
+    const params = new URLSearchParams();
+    params.set("from", from);
+    params.set("to", to);
     return request(app)
       .get(`/api/questions/?${params.toString()}`)
       .set(tokenHeaderKey, `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
-        expect(body.questions).toEqual(expect.arrayContaining([expect.objectContaining({date: expect.})]))
+        body.questions.forEach((question) => {
+          expect(new Date(question.date)).toBeBetween(
+            new Date(from),
+            new Date(to)
+          );
+        });
+        body.questions[0].date = new Date(body.questions.date);
       });
+  });
+  it("400: bad query", () => {
+    const from = "INVALID DATE",
+      to = "INVALID DATE";
+    const params = new URLSearchParams();
+    params.set("from", from);
+    params.set("to", to);
+    return request(app)
+      .get(`/api/questions/?${params.toString()}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .expect(400);
   });
 });

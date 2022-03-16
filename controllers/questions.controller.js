@@ -2,19 +2,26 @@ const Question = require("../models/questions.model");
 
 module.exports.getQuestions = (req, res, next) => {
   let { limit, tags, from, to } = req.query;
-  console.log(tags);
   if (!limit || limit < 0 || !Number.isInteger(limit)) limit = 100;
   const query = {};
-  if (from) query.date.$gte = from;
-  if (to) query.date.$lte = to;
+  if (from || to) query.date = {};
+  if (from) {
+    query.date.$gte = new Date(from);
+  }
+  if (to) {
+    query.date.$lte = new Date(to);
+  }
   if (!Array.isArray(tags)) {
     // turn single value into array
     tags = [tags];
   }
-  if (tags[0]) query.tags = { $all: tags };
   console.log(query);
+  if (tags[0]) query.tags = { $all: tags };
   return Question.find(query)
     .limit(limit)
     .then((questions) => res.status(200).send({ questions }))
-    .catch((err) => next(err));
+    .catch((err) => {
+      err.status = 400;
+      next(err);
+    });
 };

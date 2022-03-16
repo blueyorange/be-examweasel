@@ -4,7 +4,7 @@
   "description": "a template for a tested node mongoose backend",
   "main": "y",
   "scripts": {
-    "test": "jest --detectOpenHandles --verbose __tests__/*.test.js",
+    "test": "jest --detectOpenHandles --verbose __tests__/questions.test.js",
     "start": "node listen.js",
     "watch": "nodemon listen.js",
     "seed": "node db/seeds/run-seed.js"
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "jest": "^27.5.1",
+    "jest-extended": "^2.0.0",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
   }

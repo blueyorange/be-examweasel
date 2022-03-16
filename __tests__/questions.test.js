@@ -130,4 +130,18 @@ describe("GET /api/questions/", () => {
         });
       });
   });
+  it("200: topic query", () => {
+    const topic = "4.1 Magnetism";
+    const params = new URLSearchParams();
+    params.set("topic", topic);
+    return request(app)
+      .get(`/api/questions/?${params.toString()}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        body.questions.forEach((question) => {
+          expect(question.topic).toBe(topic);
+        });
+      });
+  });
 });

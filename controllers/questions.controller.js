@@ -13,7 +13,6 @@ module.exports.getQuestions = (req, res, next) => {
   }
   if (topic) query.topic = topic;
   if (term) query.question_text = { $regex: new RegExp(term, "i") };
-  console.log(query);
   if (tags[0]) query.tags = { $all: tags };
   return Question.find(query)
     .limit(limit)

@@ -4,6 +4,7 @@ const mongoose = require("mongoose"),
 const QuestionSchema = new mongoose.Schema({
   number: Number,
   date: Date,
+  topic: String,
   subject: String,
   award: String,
   exam_board: String,

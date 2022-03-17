@@ -25,7 +25,6 @@ module.exports.getQuestions = (req, res, next) => {
 
 module.exports.postQuestion = (req, res, next) => {
   const newQuestion = req.body;
-  console.log(newQuestion);
   return Question.create(newQuestion)
     .then((question) => res.status(200).send({ question }))
     .catch((err) => next(err));
@@ -33,16 +32,13 @@ module.exports.postQuestion = (req, res, next) => {
 
 module.exports.putQuestion = (req, res, next) => {
   const { _id } = req.params;
-  console.log(_id);
   const update = req.body;
   return Question.findByIdAndUpdate(_id, update, { new: true })
     .then((question) => {
-      console.log(question, "!!!!!");
       if (!question) res.status(404).send({ msg: "Question not found." });
       res.status(204).send({ question });
     })
     .catch((err) => {
-      console.log(err);
       err.status = 400;
       next(err);
     });

@@ -16,7 +16,7 @@ module.exports.getQuestions = (req, res, next) => {
   if (tags[0]) query.tags = { $all: tags };
   return Question.find(query)
     .limit(limit)
-    .then((questions) => res.status(200).send({ questions }))
+    .then((questions) => res.status(201).send({ questions }))
     .catch((err) => {
       err.status = 400;
       next(err);

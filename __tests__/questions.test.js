@@ -148,7 +148,7 @@ describe("GET /api/questions/", () => {
 });
 
 describe("POST /api/questions/", () => {
-  it("200: returns new question object", () => {
+  it("201: returns new question object", () => {
     const newQuestion = {
       subject: "Physics",
       award: "IGCSE",
@@ -158,7 +158,7 @@ describe("POST /api/questions/", () => {
       .post("/api/questions/")
       .set(tokenHeaderKey, `Bearer ${token}`)
       .send(newQuestion)
-      .expect(200)
+      .expect(201)
       .then(({ body }) => {
         test_oid = body.question._id;
         expect(body.question).toEqual(

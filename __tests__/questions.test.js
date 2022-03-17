@@ -9,6 +9,7 @@ const db = require("./db");
 const tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
 let token = "NO TOKEN";
 let test_oid;
+const Question = require("../models/questions.model");
 
 beforeAll(async () => {
   await db.connect();
@@ -203,6 +204,35 @@ describe("PUT /api/questions/:_id", () => {
       .put(`/api/questions/623323766fba124dea76071b`)
       .set(tokenHeaderKey, `Bearer ${token}`)
       .send(modifiedQuestion)
+      .expect(404);
+  });
+});
+
+describe("DELETE /api/questions/:id", () => {
+  it("200: resource deleted", () => {
+    return request(app)
+      .delete(`/api/questions/${test_oid}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .then(() => {
+        Question.findOne({ _id: test_oid }).then((q) => {
+          expect(q).toBe(null);
+        });
+      });
+  });
+  it("400: invalid id", () => {
+    return request(app)
+      .delete(`/api/questions/INVALID`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
+      .expect(400);
+  });
+  it("404: not found", () => {
+    return request(app)
+      .delete(`/api/questions/623323766fba124dea76071b`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
       .expect(404);
   });
 });

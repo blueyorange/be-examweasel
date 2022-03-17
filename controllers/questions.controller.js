@@ -16,7 +16,7 @@ module.exports.getQuestions = (req, res, next) => {
   if (tags[0]) query.tags = { $all: tags };
   return Question.find(query)
     .limit(limit)
-    .then((questions) => res.status(201).send({ questions }))
+    .then((questions) => res.status(200).send({ questions }))
     .catch((err) => {
       err.status = 400;
       next(err);
@@ -26,7 +26,7 @@ module.exports.getQuestions = (req, res, next) => {
 module.exports.postQuestion = (req, res, next) => {
   const newQuestion = req.body;
   return Question.create(newQuestion)
-    .then((question) => res.status(200).send({ question }))
+    .then((question) => res.status(201).send({ question }))
     .catch((err) => next(err));
 };
 
@@ -37,6 +37,19 @@ module.exports.putQuestion = (req, res, next) => {
     .then((question) => {
       if (!question) res.status(404).send({ msg: "Question not found." });
       res.status(204).send({ question });
+    })
+    .catch((err) => {
+      err.status = 400;
+      next(err);
+    });
+};
+
+module.exports.deleteQuestion = (req, res, next) => {
+  const { _id } = req.params;
+  return Question.deleteOne({ _id })
+    .then(({ deletedCount }) => {
+      if (deletedCount === 0) return res.status(404).send();
+      res.status(200).send();
     })
     .catch((err) => {
       err.status = 400;

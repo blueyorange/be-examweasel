@@ -25,3 +25,16 @@ module.exports.putDocument = (req, res, next) => {
       next(err);
     });
 };
+
+module.exports.deleteDocument = (req, res, next) => {
+  const { _id } = req.params;
+  return Document.deleteOne({ _id })
+    .then(({ deletedCount }) => {
+      if (deletedCount === 0) return res.status(404).send();
+      res.status(200).send();
+    })
+    .catch((err) => {
+      err.status = 400;
+      next(err);
+    });
+};

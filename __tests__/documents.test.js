@@ -76,3 +76,32 @@ describe("PUT /api/documents/:_id", () => {
       .expect(404);
   });
 });
+
+describe("DELETE /api/documents/:id", () => {
+  it("200: resource deleted", () => {
+    return request(app)
+      .delete(`/api/documents/${testDocId}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
+      .expect(200)
+      .then(() => {
+        Document.findOne({ _id: testDocId }).then((doc) => {
+          expect(doc).toBe(null);
+        });
+      });
+  });
+  it("400: invalid id", () => {
+    return request(app)
+      .delete(`/api/documents/INVALID`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
+      .expect(400);
+  });
+  it("404: not found", () => {
+    return request(app)
+      .delete(`/api/documents/623323766fba124dea76071b`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send()
+      .expect(404);
+  });
+});

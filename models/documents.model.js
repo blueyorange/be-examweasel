@@ -1,10 +1,11 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const DocumentSchema = new mongoose.Schema({
-  questions: [{ type: Schema.Types.objectId, ref: "Question" }],
-  author: [{ type: Schema.Types.objectId, ref: "User" }],
-  created: Date,
-  share: Boolean,
-});
+const DocumentSchema = new Schema(
+  {
+    questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
+    author: String,
+  },
+  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+);
 
-module.exports = mongoose.model("Document", DocumentSchema);
+module.exports = model("Document", DocumentSchema);

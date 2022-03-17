@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const DocumentSchema = new Schema(
   {
-    questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
+    question_ids: [{ type: Schema.Types.ObjectId, ref: "Question" }],
     author: String,
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

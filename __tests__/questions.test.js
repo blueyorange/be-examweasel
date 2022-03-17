@@ -8,7 +8,7 @@ require("dotenv").config();
 const db = require("./db");
 const tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
 let token = "NO TOKEN";
-let test_id;
+let test_oid;
 
 beforeAll(async () => {
   await db.connect();

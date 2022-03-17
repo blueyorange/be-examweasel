@@ -9,6 +9,8 @@ const db = require("./db");
 const tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
 let token = "NO TOKEN";
 const Question = require("../models/questions.model");
+const Document = require("../models/documents.model");
+let testDocId = "NO ID";
 
 beforeAll(async () => {
   await db.connect();
@@ -21,6 +23,7 @@ beforeAll(async () => {
     .expect(200);
   token = body.token.split(" ")[1];
 });
+
 afterAll(async () => {
   await db.clearDatabase();
   await db.closeDatabase();
@@ -28,17 +31,48 @@ afterAll(async () => {
 
 describe("POST /api/documents/", () => {
   it("201: resource created", async () => {
-    const ids = (await Question.find().limit(5)).map((question) =>
-      question._id.toString()
-    );
-    const body = { questions: ids, author: "russ.johnson" };
+    const doc = { author: "russ.johnson" };
     return request(app)
       .post("/api/documents/")
       .set(tokenHeaderKey, `Bearer ${token}`)
-      .send(body)
+      .send(doc)
       .expect(201)
       .then(({ body }) => {
-        expect(body.document).toEqual(expect.objectContaining({ ...body }));
+        testDocId = body.document._id;
+        expect(body.document).toEqual(
+          expect.objectContaining({ _id: expect.any(String), ...doc })
+        );
       });
+  });
+});
+
+describe("PUT /api/documents/:_id", () => {
+  let testQuestionIds;
+  it("204: updates document", async () => {
+    testQuestionIds = (await Question.find().limit(5)).map((question) =>
+      question._id.toString()
+    );
+    const modifiedDocument = {
+      question_ids: testQuestionIds,
+    };
+    return request(app)
+      .put(`/api/documents/${testDocId}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send(modifiedDocument)
+      .expect(204);
+  });
+  it("400: invalid object id", () => {
+    return request(app)
+      .put(`/api/documents/INVALID_ID`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send({})
+      .expect(400);
+  });
+  it("404: object not found", () => {
+    return request(app)
+      .put(`/api/documents/623323766fba124dea76071b`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send({})
+      .expect(404);
   });
 });

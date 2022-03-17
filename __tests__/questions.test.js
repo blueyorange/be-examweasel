@@ -8,6 +8,7 @@ require("dotenv").config();
 const db = require("./db");
 const tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
 let token = "NO TOKEN";
+let test_id;
 
 beforeAll(async () => {
   await db.connect();
@@ -143,5 +144,65 @@ describe("GET /api/questions/", () => {
           expect(question.topic).toBe(topic);
         });
       });
+  });
+});
+
+describe("POST /api/questions/", () => {
+  it("200: returns new question object", () => {
+    const newQuestion = {
+      subject: "Physics",
+      award: "IGCSE",
+      exam_board: "CIE",
+    };
+    return request(app)
+      .post("/api/questions/")
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send(newQuestion)
+      .expect(200)
+      .then(({ body }) => {
+        test_oid = body.question._id;
+        expect(body.question).toEqual(
+          expect.objectContaining({ _id: expect.any(String), ...newQuestion })
+        );
+      });
+  });
+});
+
+describe("PUT /api/questions/:_id", () => {
+  const modifiedQuestion = {
+    number: 1,
+    date: "2009-05",
+    topic: "1.8 dingle dangle",
+    subject: "Physics",
+    award: "A Level",
+    exam_board: "AQA",
+    tags: ["length", "short-answer"],
+    question_images: ["https://3t0gmnpegmfmefdv"],
+    mark_scheme_images: ["https://3t0gmnpegmfmefdv"],
+    added_by: "russ.johnson",
+    question_text: "What is a micrometer?",
+    answer_text: "A device for measuring small things",
+    description: "A question about a micrometer",
+  };
+  it("204: updates question object", () => {
+    return request(app)
+      .put(`/api/questions/${test_oid}`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send(modifiedQuestion)
+      .expect(204);
+  });
+  it("400: invalid object id", () => {
+    return request(app)
+      .put(`/api/questions/INVALID_ID`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send(modifiedQuestion)
+      .expect(400);
+  });
+  it("404: object not found", () => {
+    return request(app)
+      .put(`/api/questions/623323766fba124dea76071b`)
+      .set(tokenHeaderKey, `Bearer ${token}`)
+      .send(modifiedQuestion)
+      .expect(404);
   });
 });

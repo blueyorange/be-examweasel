@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-
-const uri = process.env.MONGO_URI;
+console.log(process.cwd());
 
 if (!process.env.MONGO_URI) {
   throw new Error("MONGO_URI not set");

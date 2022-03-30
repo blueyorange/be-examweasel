@@ -1,6 +1,7 @@
 # Be-examweasel
 
 This is a REST api backend for an exam question database which stores images and question metadata.
+Hosted @ [https://examweasel.herokuapp.com](https://examweasel.herokuapp.com)
 
 ## endpoints
 

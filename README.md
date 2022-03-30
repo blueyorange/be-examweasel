@@ -1,31 +1,40 @@
-# Node-mongoose
+# Be-examweasel
 
-This is a generic backend. It is intended to be a template for the creation of node backends with database provided by mongodb and object modelling provided by mongoose.
+This is a REST api backend for an exam question database which stores images and question metadata.
 
 ## endpoints
 
 All routes are fully tested with jest.
 
-### POST /auth/login
+### GET /
+returns the message "Welcome to api"
 
-takes a username and password in the body and returns a json web token (JWT) in res.body.token. This can then be used to authorise and provide access to the endpoints in the /api.
+### POST /register
+Creates a new user with username and password.
 
-### POST /auth/register
+### POST /login
+Returns a JWT with the correct username and login details.
 
-takes a username and password and creates a new user with that username and password. The password is encryted (salted and hashed) using bcrypt before being stored in the database. A 201 status is returned upon success. The password must contain 8 characters, at least 1 lowercase 1 uppercase 1 number 1 special.
-
-## /api
-
-All of these routes are secured with JWT authorization.
-
-### GET /api/info
-
-This supplies a summary in json format of the endpoints. At least it should do.
+### GET /api/
+All api endpoints require valid JWT.
+This one returns user information.
 
 ### GET /api/users
-
-Upon submission of valid token in Authorization header ("Bearer TOKEN") an array of users is returned.
+With valid JWT returns list of users.
 
 ### GET /api/users/:username
+Returns user data for valid user.
 
-User's details are returned with valid username, otherwise 404 error.
+### GET /api/questions/
+Returns array of questions. Accepts query parameters.
+
+### POST /api/questions/
+Creates new question in db, returns \_id.
+
+### PUT /api/questions/:\_id
+Alters question data
+
+### DELETE /api/questions/:\_id
+Deletes question
+
+To be finished...

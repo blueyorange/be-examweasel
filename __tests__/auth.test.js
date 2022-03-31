@@ -25,6 +25,16 @@ describe("GET /auth/login", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.token).toEqual(expect.stringMatching(/^JWT/));
+        expect(body.user).toEqual(
+          expect.objectContaining({
+            username: expect.any(String),
+          })
+        );
+        expect(body.user).toEqual(
+          expect.not.objectContaining({
+            password: expect.any(String),
+          })
+        );
       });
   });
   it("401: incorrect password", () => {

@@ -32,11 +32,15 @@ describe("GET /", () => {
 });
 
 describe("GET /api", () => {
-  it("200: serves a description of the api after auth using username and password", async () => {
+  it("200: returns user details (but not password) with valid web token", async () => {
     return request(app)
       .get("/api")
       .set(tokenHeaderKey, `Bearer ${token}`)
-      .expect(200);
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user.username).toBe(testData.users[0].username);
+        expect(body.user.password).toBe(undefined);
+      });
   });
   it("401: unauthorised with invalid token", async () => {
     const token = "INVALID.TOKEN";

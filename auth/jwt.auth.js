@@ -15,13 +15,13 @@ module.exports = async (req, res, next) => {
     const token = req.get(tokenHeaderKey).split(" ")[1];
     _id = jwt.verify(token, jwtSecretKey)._id;
   } catch (err) {
-    return res.status(401).send({ msg: `Unauthorised : ${err}` });
+    return res.status(401).send({ msg: `Unauthorised : Invalid token` });
   }
   if (_id) {
-    req.user = await User.findOne({ _id });
-    delete req.user.password;
+    const { username } = await User.findOne({ _id });
+    req.user = { username };
     next();
   } else {
-    return res.status(401).send({ msg: "Unauthorised" });
+    return res.status(401).send({ msg: "Unauthorised : Invalid token" });
   }
 };

@@ -1,8 +1,7 @@
-const endpoints = require("../endpoints.json");
-
 const info = async (req, res, next) => {
   try {
-    res.status(200).send({ endpoints });
+    const user = req.user;
+    res.status(200).send({ user });
   } catch (error) {
     next(error);
   }

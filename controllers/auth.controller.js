@@ -42,7 +42,7 @@ const login = (req, res, next) => {
         user.comparePassword(password, (err, isMatch) => {
           if (isMatch && !err) {
             var token = jwt.sign(user.toObject(), process.env.JWT_SECRET_KEY);
-            res.status(200).send({ token: `JWT ${token}` });
+            res.status(200).send({ token: `JWT ${token}`, user: { username } });
           } else {
             res.status(401).send({
               success: false,

@@ -7,6 +7,7 @@ const runSeed = async (data) => {
   await connectDB();
   await seed(data);
   await mongoose.connection.close();
+  process.exit();
 };
 
 runSeed(devData);

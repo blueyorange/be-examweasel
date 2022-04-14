@@ -2,13 +2,13 @@ const router = require("express").Router();
 const {
   getQuestions,
   postQuestion,
-  putQuestion,
+  patchQuestion,
   deleteQuestion,
 } = require("../controllers/questions.controller");
 
 router.get("/", getQuestions);
 router.post("/", postQuestion);
-router.put("/:_id", putQuestion);
+router.patch("/:_id", patchQuestion);
 router.delete("/:_id", deleteQuestion);
 
 module.exports = router;

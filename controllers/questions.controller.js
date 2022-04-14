@@ -30,13 +30,15 @@ module.exports.postQuestion = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-module.exports.putQuestion = (req, res, next) => {
+module.exports.patchQuestion = (req, res, next) => {
   const { _id } = req.params;
   const update = req.body;
-  return Question.findByIdAndUpdate(_id, update, { new: true })
+  Question.findByIdAndUpdate(_id, update, { new: true })
+    .exec()
     .then((question) => {
+      console.log(question);
       if (!question) res.status(404).send({ msg: "Question not found." });
-      res.status(204).send({ question });
+      return res.status(204).send();
     })
     .catch((err) => {
       err.status = 400;

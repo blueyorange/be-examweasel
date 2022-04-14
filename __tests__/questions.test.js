@@ -169,10 +169,10 @@ describe("POST /api/questions/", () => {
   });
 });
 
-describe("PUT /api/questions/:_id", () => {
+describe("PATCH /api/questions/:_id", () => {
   const modifiedQuestion = {
     number: 1,
-    date: "2009-05",
+    date: new Date("2009-05"),
     topic: "1.8 dingle dangle",
     subject: "Physics",
     award: "A Level",
@@ -187,21 +187,29 @@ describe("PUT /api/questions/:_id", () => {
   };
   it("204: updates question object", () => {
     return request(app)
-      .put(`/api/questions/${test_oid}`)
+      .patch(`/api/questions/${test_oid}`)
       .set(tokenHeaderKey, `Bearer ${token}`)
       .send(modifiedQuestion)
-      .expect(204);
+      .expect(204)
+      .then(async (res) => {
+        console.log(res.body);
+        await Question.findOne({ _id: test_oid })
+          .exec()
+          .then((q) => {
+            expect(q).toEqual(expect.objectContaining(modifiedQuestion));
+          });
+      });
   });
   it("400: invalid object id", () => {
     return request(app)
-      .put(`/api/questions/INVALID_ID`)
+      .patch(`/api/questions/INVALID_ID`)
       .set(tokenHeaderKey, `Bearer ${token}`)
       .send(modifiedQuestion)
       .expect(400);
   });
   it("404: object not found", () => {
     return request(app)
-      .put(`/api/questions/623323766fba124dea76071b`)
+      .patch(`/api/questions/623323766fba124dea76071b`)
       .set(tokenHeaderKey, `Bearer ${token}`)
       .send(modifiedQuestion)
       .expect(404);
